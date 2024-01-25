@@ -1,0 +1,17 @@
+.team1{
+    margin-right: 100px;
+}
+.team2{
+    margin-left: 100px;
+}
+
+.no-matches{
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+

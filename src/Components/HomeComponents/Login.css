@@ -1,0 +1,12 @@
+.login,
+.image {
+  min-height: 100vh;
+}
+
+.bg-image {
+  background-color: #c3a0f4;
+  background-image: url("https://fantasy11.s3.ap-south-1.amazonaws.com/Images/Background.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}

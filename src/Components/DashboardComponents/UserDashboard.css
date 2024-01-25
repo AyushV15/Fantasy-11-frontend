@@ -1,0 +1,41 @@
+.offcanvas-user-profile{
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+    
+}
+
+.offcanvas-wallet{
+    margin-top: 10px;
+    border: none;
+}
+
+.wallet-body{
+    background-color: rgba(164, 122, 170, 0.31);
+    border-radius: 20px;
+}
+
+.wallet-body:hover{
+    background-color: rgba(160, 42, 176, 0.31);
+    border-radius: 20px;
+}
+
+.wallet-body div{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.logoutbutton{
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+}
+.arrow:hover{
+    cursor: pointer;
+    color: blue;
+}
+
+.cardheader{
+    background-color: rgba(82, 151, 242, 0.31)
+}

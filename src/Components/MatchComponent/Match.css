@@ -1,0 +1,71 @@
+
+
+.match-navbar{
+    background-color: #1d1a1a;
+    color: white;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.match-navbar div{
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.match-navbar-title{
+    color: white;
+}
+
+.nav-team1{
+    height: 100px;
+}
+
+.nav-team2{
+    height: 100px;
+}
+
+.match-tabs{
+    margin-top: 20px;
+}
+
+.match-tabs .nav-item .nav-link {
+    color: rgb(0, 0, 0); /* Set the color for non-active tabs */
+    background-color: rgb(223, 213, 213); /* Set the background color for non-active tabs (if needed) */
+  }
+  
+  /* Active tab styles */
+  .match-tabs .nav-link.active {
+    color: white;
+    background-color: rgb(40, 40, 43);
+  }
+
+  .match-tabss .nav-item .nav-link {
+    color: rgb(0, 0, 0); /* Set the color for non-active tabs */
+    background-color: rgb(255, 255, 255); /* Set the background color for non-active tabs (if needed) */
+  }
+  
+  /* Active tab styles */
+  .match-tabss .nav-link.active {
+    color: rgb(255, 255, 255);
+    background-color: rgb(32, 82, 231);
+  }
+
+.create-team-button{
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.match-countdown{
+  display: flex;
+  height: 25px;
+  color: white;
+  background-color:  #1d1a1a;
+  align-items: center;
+  justify-content: center;
+}

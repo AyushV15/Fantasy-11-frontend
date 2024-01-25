@@ -1,0 +1,25 @@
+.create-contest{
+    background-image: url("https://fantasy11.s3.ap-south-1.amazonaws.com/Images/cotest-background.avif");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 2px solid black;
+    height: 737px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-contest-1{
+    color: white;
+    margin: 20px;
+}
+
+.create-contest h1 {
+    text-align: center;
+}
+
+.create-contest label {
+    color: white;
+}

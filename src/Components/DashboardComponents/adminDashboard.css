@@ -1,0 +1,21 @@
+.match-tabs .nav-item .nav-link {
+    color: rgb(0, 0, 0); /* Set the color for non-active tabs */
+    background-color: rgb(223, 213, 213); /* Set the background color for non-active tabs (if needed) */
+  }
+  
+  /* Active tab styles */
+  .match-tabs .nav-link.active {
+    color: white;
+    background-color: rgb(40, 40, 43);
+  }
+
+.users-table{
+    margin-top: 20px;
+}
+
+.search-user{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 20px;
+}

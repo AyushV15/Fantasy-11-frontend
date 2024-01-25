@@ -1,0 +1,23 @@
+.team{
+    overflow: hidden;
+    height: 600px;
+    width: 600px;
+    background-size: cover;
+    background-image: url("https://fantasy11.s3.ap-south-1.amazonaws.com/Images/pitch.jpg");
+    
+}
+
+.teamrow{
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+.teamrow div {
+    height: 126px;
+    display: flex;
+    justify-content: space-evenly;   
+}
+
+.player-badge{
+    margin-bottom: 20px;
+}

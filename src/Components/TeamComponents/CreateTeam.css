@@ -1,0 +1,21 @@
+.create-team-inst{
+    height: 50px;
+    background-color: black;
+    border: 1px solid white;
+    border-left: none;
+    border-right: none;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-team-inst p {
+    margin-top: 10px;
+}
+
+.sort-players{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

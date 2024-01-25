@@ -1,0 +1,67 @@
+<Container fluid>
+            <Row >
+                <Col md={6} className="d-none d-md-flex bg-image"></Col>
+                <Col md={6} className="bg-light">
+            <div className="login d-flex align-items-center py-5">
+                <Container>
+                    <Row>
+                        <Col lg={10} xl={7} className="mx-auto">
+                            <Image src={LOGO} style={{ height: "100px", position: "relative", bottom: "50px" }} />
+                            <Form onSubmit={formik.handleSubmit}>
+                            <Form.Group className="form-group mb-3">
+                                <Form.Control
+                                    type="text" placeholder="Username" className="form-control rounded-pill border-0 shadow-sm px-4"
+                                    name="username" onChange={formik.handleChange}
+                                    isInvalid = {formik.errors.username}
+                                    />
+                                            <Form.Control.Feedback type="invalid">
+                                                {formik.errors.username}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+        
+                                        <Form.Group className="form-group mb-3">
+                                            <Form.Control
+                                            type="email" placeholder="Email" className="form-control rounded-pill border-0 shadow-sm px-4"
+                                            name="email" onChange={formik.handleChange}
+                                            isInvalid = {formik.errors.email}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {formik.errors.email}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+        
+                                        <Form.Group className="form-group mb-3">
+                                            <Form.Control
+                                            type="number" placeholder="Mobile" className="form-control rounded-pill border-0 shadow-sm px-4"
+                                            name="mobile" onChange={formik.handleChange}
+                                            isInvalid = {formik.errors.mobile}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {formik.errors.mobile}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+        
+                                        <Form.Group className="form-group mb-3">
+                                            <Form.Control
+                                            type="password" placeholder="Password" className="form-control rounded-pill border-0 shadow-sm px-4"
+                                            name="password" onChange={formik.handleChange}
+                                            isInvalid = {formik.errors.password}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {formik.errors.password}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                
+                                
+                                <Button style={{ backgroundColor: "#7510ff", color: "white" }} type="submit" className="btn btn-block text-uppercase mb-2 rounded-pill shadow-sm">Register</Button>
+                                <div className="text-center d-flex justify-content-between mt-4">
+                                    <p>Already a Member? <Link to={"/login"}>Login</Link> | <Link to={"/"}>Home</Link></p>
+                                </div>
+                            </Form>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+        </Col>
+    </Row>
+</Container>
