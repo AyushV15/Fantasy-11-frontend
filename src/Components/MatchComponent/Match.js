@@ -55,6 +55,7 @@ export default function OneMatch(){
     const navigate = useNavigate()
     const [userContest,userContestDispatch] = useReducer(userContestReducer , [])
     const [sUpdate,setSUpdate] = useState(false)
+    const [rankCalculated,setRankCalculated] = useState(false)
     const [team ,setTeam] = useState(null)
     const [mycontest,setMyContest] = useState(false)
     const [selectedmyContest,setSelectedMyContest] = useState({})
@@ -187,8 +188,8 @@ export default function OneMatch(){
 
     const contestUpdate = async (id) =>{
         try{
-            await axios.put(`api/match/${id}/generate-results`)
-            toast.success("Rank Calculated successfully")
+            const response = await axios.put(`api/match/${id}/generate-results`)
+            setRankCalculated(true)
         }catch(e){
             console.log(e)
         }
@@ -252,26 +253,46 @@ export default function OneMatch(){
 
     const extendDeadline = async () => {
 
-        if(new Date(extendDate.current.value) > new Date()){
-        const formdata = {
-            deadline : new Date(extendDate.current.value),
-            message : Message.current.value
+        const { value: formValues } = await Swal.fire({
+            title: "Extend Deadline",
+            html: `
+              <input id="deadline" type="datetime-local">
+              <input id="message" type="text">
+            `,
+            focusConfirm: false,
+            preConfirm: () => {
+              const deadlineValue = document.getElementById("deadline").value;
+              console.log(deadlineValue,"asdjkfkj")
+              const messageValue = document.getElementById("message").value.trim();
+          
+              if (new Date(deadlineValue) < new Date()) {
+                Swal.showValidationMessage("Deadline should be greater than today");
+                return false;
+              }
+          
+              if (messageValue.length === 0) {
+                Swal.showValidationMessage("Message is required");
+                return false;
+              }
+          
+              return {
+                deadline: new Date(deadlineValue),
+                message: messageValue,
+              };
+            },
+          })
+          if (formValues) {
+              try{
+                  const response = await axios.put(`api/matches/${id}`,formValues,{
+                      headers : {
+                          Authorization : localStorage.getItem("token")
+                      }
+                  })
+              }catch(e){
+                  console.log(e)
+              }
         }
-        try{
-            const response = await axios.put(`api/matches/${id}`,formdata,{
-                headers : {
-                    Authorization : localStorage.getItem("token")
-                }
-            })
-        }catch(e){
-            console.log(e)
-        }
-
-        console.log(formdata)
-        console.log(extendDate.current.value)
-    }else{
-        toast.error("deadline should be greater than today")
-    }}
+    }
 
     const cancelContests = async () =>{
         try{
@@ -342,14 +363,14 @@ export default function OneMatch(){
           
             {user.role == "admin" && (
             <div>
-            {m && <Button variant = "success" onClick={()=>contestUpdate(m._id)}>Calculate Rank</Button>}
-            {match && <Button onClick={()=>navigate(`/match/${match ? match._id : m._id}/create-contest`)}>Create Contest</Button>} 
-            {m && <Button variant = "info" onClick={generateResults}>Generate Results</Button>}
-            <Button variant = "danger" onClick={cancelMatch}>Cancel Match</Button>
-            <input type="datetime-local" min ={(new Date()).toISOString().slice(0, 16)} ref={extendDate}/>
-            <input type="text" ref={Message}/>
-            <Button size="sm" onClick={extendDeadline}>Extend Deadline</Button>
-            <Button onClick={cancelContests}>Cancel Contest</Button>
+            {m && <Button size="sm" variant = "success" onClick={()=>contestUpdate(m._id)}>Calculate Rank</Button>}
+            {match && <Button size="sm" onClick={()=>navigate(`/match/${match ? match._id : m._id}/create-contest`)}>Create Contest</Button>} 
+            {m && rankCalculated && <Button variant = "info" onClick={generateResults}>Generate Results</Button>}
+            <Button size="sm" variant = "danger" onClick={cancelMatch}>Cancel Match</Button>
+            <Button size="sm" variant="warning" onClick={cancelContests}>Cancel Contest</Button>
+            {/* <input type="datetime-local" min ={(new Date()).toISOString().slice(0, 16)} ref={extendDate}/>
+            <input type="text" ref={Message}/><br/> */}
+            <Button size="sm" variant="secondary" onClick={extendDeadline}>Extend Deadline</Button>
             </div>
             )}
             {user.role == "user" && <Row>
