@@ -1,10 +1,29 @@
 import { useEffect, useState } from "react";
 import { ListGroup, ListGroupItem, Modal, Table,Image } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { toast ,ToastContainer } from "react-toastify";
 
 export default function ViewMyContest({ele,close,match,m}){
 
     const [modal,setModal] = useState(true)
     const [team,setTeam] = useState([])
+    const user = useSelector(state =>{
+      return state.user
+    })
+
+    const handleTeamView = (e) =>{
+      console.log(e.userId._id)
+      console.log(user._id)
+      if(new Date(m.deadline) > new Date()){
+        if(user._id == e.userId._id){
+          setTeam(e.team)
+        }else{
+          toast.info("You can only view other players teams , after the match has started")
+        }
+      }else{
+        setTeam(e.team)
+      }
+    }
 
     return(
         <div>
@@ -60,8 +79,8 @@ export default function ViewMyContest({ele,close,match,m}){
                           }).map((e,i) => {
                             return(
                               <ListGroup.Item 
-                              variant= {match && new Date(match.deadline) || new Date(m.deadline)  < new Date() ? (i + 1 <= ele.prizeBreakup.length ? "success" : "danger") : ("") }
-                              onClick={()=>setTeam(e.team)}><b style={{fontSize : "10px"}}>Rank {i+1}</b> {e.userId.username}</ListGroup.Item>
+                              variant= {m && new Date(m.deadline)  < new Date() ? (i + 1 <= ele.prizeBreakup.length ? "success" : "danger") : ("") }
+                              onClick={()=>handleTeamView(e)}><b style={{fontSize : "10px"}}>Rank {i+1}</b> {e.userId.username}</ListGroup.Item>
                             )
                           })}
                     </ListGroup>
@@ -110,6 +129,7 @@ export default function ViewMyContest({ele,close,match,m}){
                     </Table>
               </Modal.Body>
             </Modal>
+            <ToastContainer/>
         </div>
     )
 }

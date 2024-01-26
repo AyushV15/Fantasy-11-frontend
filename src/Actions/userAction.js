@@ -24,3 +24,10 @@ export const setUser = (user) =>{
         payload : user
     }
 }
+
+export const updatePic = (pic) =>{
+    return {
+        type : "UPDATE_PIC",
+        payload : pic
+    }
+}

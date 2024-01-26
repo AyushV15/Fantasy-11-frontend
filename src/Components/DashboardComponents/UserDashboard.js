@@ -38,6 +38,24 @@ export default function UserDashboard(){
       localStorage.clear('token')
       navigate('/')
     }
+
+    useEffect(()=>{
+      (async ()=>{
+          try{
+              const id = localStorage.getItem('stripeId')
+              const response = await axios.delete(`api/delete-payment/${id}`,{
+                  headers : {
+                      Authorization : localStorage.getItem('token')
+                  }
+              })
+              if(response){
+                  localStorage.removeItem("stripeId")
+              }
+          }catch(e){
+              console.log(e)
+          }
+      })()
+  },[])
     
     const dispatch = useDispatch()
     useEffect(()=>{
@@ -71,16 +89,14 @@ export default function UserDashboard(){
       }
     }
 
-    const makePayment = async () =>{
-      
-      const stripe = await loadStripe("pk_test_51OUVJySJWZzpdKdVcKzXRNPaNuFoJl8goZC4xUBmoMnzRGcjb5rvB3Wc3wpUEa3hPBhZfUNl1HTEnPkuPsw3OYAB00zs3NKdmR")
-
+    const makePayment2 = async () =>{
       if(Number(amount) <= 1000){
         const body = {
+          id : user._id,
           name : user.username,
           amount : Number(amount)
         }
-        
+        console.log(Number(""))
         setLoading(true)
         try{
           const response = await axios.post('api/checkout',body,{
@@ -88,20 +104,15 @@ export default function UserDashboard(){
               Authorization : localStorage.getItem('token')
             }
           })
-  
-          const result = await stripe.redirectToCheckout({
-            sessionId : response.data.id
-          })
-          
-          if(result.error){
-            console.log(result.error)
-          }
+
+          console.log(response.data.id)
+          localStorage.setItem('stripeId', response.data.id)
+          window.location = response.data.url
   
         }catch(e){
           console.log(e)
         }
-      }
-      else{
+      }else{
         toast.error("amount should be less than or equal to 1000")
       }
     }
@@ -254,8 +265,19 @@ export default function UserDashboard(){
             Wallet 
         </Modal.Header>
         <Modal.Body>
-            <input type="number" value={amount} onChange={(e)=>setAmount(e.target.value)}/>
-            <button onClick={makePayment}>Add money</button> {loading && <Image src={money} width={40}/>}
+        {loading ? (
+        <div className="walletModal">
+          <Image src={money} width={100}/>
+        </div>
+        ) : (
+          <div className="walletModal">
+            <Image width={200} src="https://fantasy11.s3.ap-south-1.amazonaws.com/Images/AddMoney.webp"/><br/>
+            <p>Min Amount Should be Rs 10</p>
+            <p>Add Amount</p>
+            <input type="number" value={amount} onChange={(e)=>setAmount(e.target.value)} /><br/>
+            <Button variant="success" onClick={makePayment2} disabled = {Number(amount) < 10}>Add money</Button> 
+          </div>
+        )}
         </Modal.Body>
       </Modal>
       <ToastContainer/>

@@ -1,6 +1,12 @@
 .update-profile{
+    margin-top: 100px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.change-password-div{
+    display: flex;
     flex-direction: column;
+    align-items: center;
 }

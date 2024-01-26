@@ -39,3 +39,9 @@
 .cardheader{
     background-color: rgba(82, 151, 242, 0.31)
 }
+
+.walletModal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

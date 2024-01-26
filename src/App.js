@@ -101,8 +101,8 @@ function App(){
             <Route path='/match/:id/create-team' element = {<CreateTeam/>}/>
             <Route path='/match/:id/create-contest' element = {<CreateContest/>}/>
             <Route path='/fantasy-points-system' element = {<FantasyScoreSystem/>}/>
-            <Route path='/:id/success' element = {<Success/>}/>
-            <Route path='/:id/failure' element = {<Failure/>}/>
+            <Route path='/success' element = {<Success/>}/>
+            <Route path='/failure' element = {<Failure/>}/>
             <Route path='/admin-dashboard' element = {<AdminDashboard/>}/>
             <Route path='/forgot-password' element = {<ForgotPassword/>}/>
             <Route path='/create-player' element = {<CreatePlayer/>}/>

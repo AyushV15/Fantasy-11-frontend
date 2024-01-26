@@ -1,11 +1,12 @@
 import { useEffect, useReducer, useState } from "react"
 import axios from "../../Axios/axios"
-import { Tab, Tabs,Col , Row ,Table, Button, InputGroup, Placeholder} from "react-bootstrap"
+import { Tab, Tabs,Col , Row ,Table, Button, Form, Modal} from "react-bootstrap"
 import "./adminDashboard.css"
 import Swal from "sweetalert2"
 import { ToastContainer, toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import {format} from "date-fns"
+
 
 const reducer = (state,action) =>{
         switch(action.type){
@@ -31,10 +32,27 @@ const reducer = (state,action) =>{
 const playerReducer = (state,action) =>{
     switch(action.type){
         case "SET_PLAYERS" : {
-            return [...state,...action.payload]
+            return {...state, data : action.payload}
         }
         case "DELETE" : {
-            return state.filter(ele => ele._id !== action.payload)
+            const newArr = state.data.filter(ele => ele._id !== action.payload)
+            return {...state , data : newArr}
+        }
+        case "EDIT" : {
+            const newArr = state.data.map(ele =>{
+                if(ele._id == action.payload._id){
+                    return {...ele,...action.payload}
+                }else{
+                    return {...ele}
+                }
+            })
+            return {...state,data : newArr}
+        }
+        case "SELECTED_PLAYER" : {
+            return {...state , selectedPlayer : {...state.selectedPlayer , ...action.payload}}
+        }
+        case "SET_MODAL" : {
+            return {...state , modal : action.payload}
         }
         default : {
             return [...state]
@@ -43,19 +61,18 @@ const playerReducer = (state,action) =>{
 }
 
 
-
 export default function AdminDashboard(){
 
     const navigate = useNavigate()
+    const [players,playerdispatch] = useReducer(playerReducer,{data : [] ,selectedPlayer : {} , modal : false})
+    
     const [users,dispatch] = useReducer(reducer,[])
-    const [players,playerdispatch] = useReducer(playerReducer,[])
     const [matches,setMatches] = useState([])
     const [search,setSearch] = useState('')
     const [playerSearch,setPlayerSearch] = useState("")
     const [role,setRole] = useState("")
     const [country,setCoutry] = useState("")
-    const countryCodes = ['AUS', 'BAN', 'ENG', 'IND', 'NZ','PAK', 'SA', 'SL', 'WI', 'AFG','ZIM', 'IRE', 'NED', 'SCO', 'UAE',
-        'NEP', 'OMA', 'PNG', 'NAM', 'CAN','KEN', 'HK']
+    const countryCodes = ['AUS', 'BAN', 'ENG', 'IND', 'NZ','PAK', 'SA', 'SL', 'WI', 'AFG','ZIM', 'IRE', 'NED', 'SCO', 'UAE','NEP', 'OMA', 'PNG', 'NAM', 'CAN','KEN', 'HK']
 
     
     useEffect(()=>{
@@ -143,6 +160,32 @@ export default function AdminDashboard(){
             }
         }
     }
+
+    const handleEdit = (ele) =>{
+        playerdispatch({type : "SELECTED_PLAYER" , payload : ele})
+        playerdispatch({type : "SET_MODAL" , payload : true})
+    }
+
+    const handleSubmit = async (e) =>{
+        e.preventDefault()
+
+        const formdata = new FormData()
+        for(const key in players.selectedPlayer){
+            formdata.append(`${key}`,players.selectedPlayer[key])
+        }
+        try{
+            const response =  await axios.put(`api/players/${players.selectedPlayer._id}`,formdata,{
+                headers : {
+                    Authorization : localStorage.getItem('token')
+                }
+            })
+            console.log(response.data)
+            playerdispatch({type : "EDIT" , payload : response.data})
+            playerdispatch({type : "SET_MODAL" ,payload : false})
+        }catch(e){
+            console.log(e)
+        }
+    }
     
     return(
         <div>
@@ -159,7 +202,7 @@ export default function AdminDashboard(){
                     <Table className="users-table" striped bordered hover>
                         <thead>
                             <tr>
-                            <th>Username</th>
+                            <th>Username</th> 
                             <th>Email</th>
                             <th>Mobile</th>
                             <th>Action</th>
@@ -206,7 +249,6 @@ export default function AdminDashboard(){
                                         <td>0</td>
                                         <td>0</td>
                                         <td>0</td>
-                                        <td><button>go to match</button></td>
                                     </tr>
                                 )
                             })}
@@ -241,7 +283,7 @@ export default function AdminDashboard(){
                             </tr>
                         </thead>
                         <tbody>
-                            {players.filter(ele =>{
+                            {players.data.filter(ele =>{
                                 if(role){
                                     return ele.role == role
                                 }else{
@@ -259,7 +301,9 @@ export default function AdminDashboard(){
                                         <td>{ele.name}</td>
                                         <td>{ele.role}</td>
                                         <td>{ele.nationality}</td>
-                                        <td><Button variant="danger" size="sm" onClick={()=>handleDelete(ele._id)}>Delete</Button></td>
+                                        <td><Button variant="danger" size="sm" onClick={()=>handleDelete(ele._id)}>Delete</Button><span> </span>
+                                        <Button variant="warning" size = "sm" onClick={()=>handleEdit(ele)}>Edit</Button>
+                                        </td>
                                     </tr>
                                 )
                             })}
@@ -275,6 +319,51 @@ export default function AdminDashboard(){
                 
                 </Col>
             </Row>
+
+            <Modal show = {players.modal} onHide={()=>playerdispatch({type : "SET_MODAL" , payload : false})}>
+                <Modal.Header>
+                    <h1>Edit Player</h1>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleSubmit}>
+                        <label>Name</label><br/>
+                        <Form.Control type="text" value={players.selectedPlayer.name} onChange={(e)=>{
+                            playerdispatch({type : "SELECTED_PLAYER" , payload : {name : e.target.value}})
+                        }} required/>
+                        <label>Role</label><br/>
+                        <Form.Select value={players.selectedPlayer.role} onChange={(e)=>{
+                            playerdispatch({type : "SELECTED_PLAYER" , payload : {role : e.target.value}})
+                        }} required >
+                            <option value={"wk"}>wk</option>
+                            <option value={"bat"}>bat</option>
+                            <option value={"all"}>all</option>
+                            <option value={"bowl"}>bowl</option>
+                        </Form.Select>
+                        <label>Country</label><br/>
+                        <Form.Select value={players.selectedPlayer.nationality} onChange={(e)=>{
+                            playerdispatch({type : "SELECTED_PLAYER" , payload : {nationality : e.target.value}})
+                        }} required >
+                            {countryCodes.map(ele =>{
+                                return(
+                            <option value={ele}>{ele}</option>
+                                )
+                            })}
+                        </Form.Select>
+                        <label>Picture</label><br/>
+                        <Form.Control
+                        type="file"
+                        accept="image/*"
+                        onChange={(e)=>{
+                            playerdispatch({type : "SELECTED_PLAYER" , payload : {pic : e.target.files[0]}})
+                        }}
+                        />
+                        <Button type="submit">submit</Button>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+
+                </Modal.Footer>
+            </Modal>
             <ToastContainer/>
         </div>
     )

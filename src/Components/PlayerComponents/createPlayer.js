@@ -17,6 +17,7 @@ export default function CreatePlayer(){
         formdata.append("role",role)
         formdata.append("nationality",country)
         formdata.append('pic',pic)
+
         try{
             const response = await axios.post("api/players",formdata,{headers : {
                 Authorization : localStorage.getItem("token")

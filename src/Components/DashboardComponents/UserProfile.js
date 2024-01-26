@@ -1,8 +1,9 @@
 import axios from "../../Axios/axios"
 import { useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { ToastContainer, toast } from "react-toastify"
-import {Form,Col, Row} from "react-bootstrap"
+import {Form,Image} from "react-bootstrap"
+import {updatePic}  from "../../Actions/userAction"
 import "./UserProfile.css"
 
 export default function UserProfile(){
@@ -29,6 +30,7 @@ export default function UserProfile(){
         
     }
 
+    const dispatch = useDispatch()
     const [profilePic, setProfilePic] = useState('')
     const [password, setPassword] = useState({
         currentPassword : "",
@@ -49,7 +51,7 @@ export default function UserProfile(){
                     Authorization : localStorage.getItem('token')
                 }
             })
-            console.log(response)
+            dispatch(updatePic(response.data.profilePic))
             toast.success("profilePic Updated Successfully")
         }catch(e){  
             console.log(e)
@@ -84,7 +86,6 @@ export default function UserProfile(){
                         Authorization : localStorage.getItem('token')
                     }
                 })
-                console.log(response)
             }catch(e){  
                 console.log(e)
                 toast.error(e.response.data)
@@ -95,8 +96,12 @@ export default function UserProfile(){
     }
 
     return(
+        
         <div className="update-profile">
-            
+            <div>
+            <Image style={{border : "2px solid black"}} src={`https://fantasy11.s3.ap-south-1.amazonaws.com/users/${user.profilePic}`} height={100} width={100} roundedCircle/>
+            <p style={{textAlign : "center"}}>{user.username}</p>
+            </div>
             <div>
             <h1>Update Profile</h1>
             <Form onSubmit={handleSubmit}>
@@ -107,13 +112,14 @@ export default function UserProfile(){
                 <label>Mobile</label>
                 <Form.Control  type="text" placeholder={user.mobile} disabled/><br/>
                 <label>Profile Pic</label>
-                <Form.Control  type="file"  onChange={(e)=>setProfilePic(e.target.files[0])}/><br/>
+                <Form.Control required  type="file"  onChange={(e)=>setProfilePic(e.target.files[0])}/><br/>
                 <Form.Control  type="submit"/>
             </Form>
             </div>
             
-            <div>
+            <div className="change-password-div">
             <h1>Change Password</h1>
+            <Image height={200} width={200} src={"https://fantasy11.s3.ap-south-1.amazonaws.com/Images/change-password-image.webp"}/>
             <Form onSubmit={handleChangePassword}>
                 <Form.Control type="password" placeholder = "Enter Old Password" value={password.currentPassword} name="currentPassword" onChange={handleChange}/>
                 {password.errors.currentPassword}

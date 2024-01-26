@@ -316,7 +316,7 @@ export default function OneMatch(){
                 date={(Date.now() + (new Date(match.deadline).getTime() - Date.now()))}
                 onComplete={()=>{
                     alert("Deadline has passed")
-                    navigate('/dashboard')
+                    navigate('/dashboard',{replace : true})
                 }}
                 />
                 )}
