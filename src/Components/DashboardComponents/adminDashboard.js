@@ -67,7 +67,7 @@ export default function AdminDashboard(){
     const [players,playerdispatch] = useReducer(playerReducer,{data : [] ,selectedPlayer : {} , modal : false})
     
     const [users,dispatch] = useReducer(reducer,[])
-    const [matches,setMatches] = useState([])
+    const [stats,setStats] = useState([])
     const [search,setSearch] = useState('')
     const [playerSearch,setPlayerSearch] = useState("")
     const [role,setRole] = useState("")
@@ -93,11 +93,11 @@ export default function AdminDashboard(){
     useEffect(()=>{
         (async () =>{
             try{
-                const response = await axios.get("api/matches",{headers : {
+                const response = await axios.get("api/stats",{headers : {
                     Authorization : localStorage.getItem('token')
                 }})
-                setMatches(response.data)
-                console.log(response.data)
+                setStats(response.data)
+
             }catch(e){
                 console.log(e)
             } 
@@ -130,7 +130,7 @@ export default function AdminDashboard(){
                 const response = await axios.put("api/users",body,{headers : {
                     Authorization : localStorage.getItem('token')
                 }})
-                setMatches(response.data)
+                dispatch({type : "UPDATE_USERS" , payload : response.data })
                 
                 console.log(response.data)
             }catch(e){
@@ -232,23 +232,24 @@ export default function AdminDashboard(){
                     <Table striped bordered hover responsive>
                         <thead>
                             <tr>
-                        
                             <th>Match</th>
                             <th>Date</th>
                             <th>Players</th>
-                            <th>Contest</th>
-                            <th>revenue</th>
+                            <th>Contests</th>
+                            <th>Revenue</th>
+                            <th>Profit</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {matches.map(ele => {
+                            {stats.map(ele => {
                                 return(
                                     <tr key={ele._id}>
                                         <td>{ele.team1} vs {ele.team2}</td>
                                         <td>{format(new Date(ele.deadline),"dd MMM yyyy")}</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
+                                        <td>{ele.users}</td>
+                                        <td>{ele.contest}</td>
+                                        <td>{ele.revenue}</td>
+                                        <td>{ele.profit}</td>
                                     </tr>
                                 )
                             })}

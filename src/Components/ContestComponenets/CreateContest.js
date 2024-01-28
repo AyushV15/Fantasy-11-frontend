@@ -18,16 +18,19 @@ export default function CreateContest(){
  
     const handleSubmit = async (e) =>{
         e.preventDefault()
+        const finalBreakup = initialBreakUp.map((ele,i) => {
+            return {...ele , rank : i + 1}
+        } )
         const formdata = {
             slots : contest.slots,
             totalPrize : contest.totalPrize,
             winners : contest.winners,
             entryFee : contest.entryFee,
-            prizeBreakup : initialBreakUp
+            prizeBreakup : finalBreakup
     }
     
     const confirm = window.confirm("confirm")
-
+    console.log(formdata)
     if(confirm){
 
         try{
@@ -40,14 +43,6 @@ export default function CreateContest(){
             toast.success("contest created successfully",{
                 position : "top-center"
             })
-            // setContest({
-            //     slots : "",
-            //     totalPrize : "",
-            //     winners : "",
-            //     entryFee : "",
-            //     prizeBreakup : []
-            // })
-            // setInitialBreakup([{rank : "",prize : ""}])
         }catch(e){
             e.response.data.errors.map(ele =>{
                 toast.error(ele.msg)
@@ -115,7 +110,7 @@ export default function CreateContest(){
                 {initialBreakUp.map((input,index) =>{
                     return(
                         <div key={index}>
-                            <Form.Control required type="number" placeholder="rank" name="rank" value={input.rank} onChange={(e)=>Change(index,e)} />
+                            <Form.Control required type="number" placeholder={`rank ${index + 1}`} name="rank" value={input.rank} disabled onChange={(e)=>Change(index,e)} />
                             <Form.Control required type="number" placeholder="prize" name="prize" value={input.prize} onChange={(e)=>Change(index,e)} />
                             {index > 0 && <Button variant="danger" onClick={()=>handleRemove(index)}>remove</Button>}
                         </div>

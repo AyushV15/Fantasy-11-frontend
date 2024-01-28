@@ -1,6 +1,6 @@
 import { useState } from "react"
 import axios from "../../Axios/axios"
-import { toast } from "react-toastify"
+import { toast,ToastContainer } from "react-toastify"
 
 export default function CreatePlayer(){
     
@@ -53,6 +53,7 @@ export default function CreatePlayer(){
             <input required type="file" onChange={(e)=>setPic(e.target.files[0])}/><br/>
             <input type="submit"/>
             </form>
+            <ToastContainer/>
         </div>
     )
 }
