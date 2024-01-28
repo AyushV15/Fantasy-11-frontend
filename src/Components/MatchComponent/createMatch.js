@@ -79,11 +79,11 @@ export default function CreateMatch2(){
                 <label>Team 1 Name</label><br/>
                 <Form.Control type="text" placeholder="team1" value={team1} onChange={(e)=>setTeam1(e.target.value)} /><br/>
                 <label>Team 1 Logo</label><br/>
-                <Form.Control type="file" onChange={(e)=>setFile1(e.target.files[0])}/><br/>
+                <Form.Control type="file" accept="image/*" onChange={(e)=>setFile1(e.target.files[0])}/><br/>
                 <label>Team 2 Name</label><br/>
                 <Form.Control type="text" placeholder="team2" value={team2} onChange={(e)=>setTeam2(e.target.value)}/><br/>
                 <label>Team 2 Logo</label><br/>
-                <Form.Control type="file" onChange={(e)=>setFile2(e.target.files[0])} /><br/>
+                <Form.Control type="file" accept="image/*" onChange={(e)=>setFile2(e.target.files[0])} /><br/>
                 <Form.Control type="datetime-local" value={deadline} onChange={(e)=>setDeadline(e.target.value)} /><br/>
             <label>Select team1 Players</label>
             <Select

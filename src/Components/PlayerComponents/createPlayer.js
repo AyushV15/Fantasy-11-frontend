@@ -50,7 +50,7 @@ export default function CreatePlayer(){
                     return(<option value={ele}>{ele}</option>)
                 })} 
             </select><br/>
-            <input required type="file" onChange={(e)=>setPic(e.target.files[0])}/><br/>
+            <input required type="file" accept="image/*" onChange={(e)=>setPic(e.target.files[0])}/><br/>
             <input type="submit"/>
             </form>
             <ToastContainer/>
