@@ -3,6 +3,7 @@ import axios from "../../Axios/axios"
 import { Tab, Tabs,Col , Row ,Table, Button, Form, Modal} from "react-bootstrap"
 import "./adminDashboard.css"
 import Swal from "sweetalert2"
+import {CaretUpFill,CaretDownFill} from "react-bootstrap-icons"
 import { ToastContainer, toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import {format} from "date-fns"
@@ -67,15 +68,17 @@ export default function AdminDashboard(){
     const [players,playerdispatch] = useReducer(playerReducer,{data : [] ,selectedPlayer : {} , modal : false})
     
     const [users,dispatch] = useReducer(reducer,[])
+    const [order,setOrder] = useState(true)
     const [stats,setStats] = useState([])
+    const [query,setQuery] = useState("deadline")
     const [search,setSearch] = useState('')
     const [playerSearch,setPlayerSearch] = useState("")
     const [role,setRole] = useState("")
     const [country,setCoutry] = useState("")
     const countryCodes = ['AUS', 'BAN', 'ENG', 'IND', 'NZ','PAK', 'SA', 'SL', 'WI', 'AFG','ZIM', 'IRE', 'NED', 'SCO', 'UAE','NEP', 'OMA', 'PNG', 'NAM', 'CAN','KEN', 'HK']
-
+    console.log(query,order)
     
-    useEffect(()=>{
+    useEffect(()=>{ 
         (async () =>{
             try{
                 const response = await axios.get("api/users",{headers : {
@@ -93,7 +96,7 @@ export default function AdminDashboard(){
     useEffect(()=>{
         (async () =>{
             try{
-                const response = await axios.get("api/stats",{headers : {
+                const response = await axios.get(`api/stats?sort=${query}&order=${order}`,{headers : {
                     Authorization : localStorage.getItem('token')
                 }})
                 setStats(response.data)
@@ -102,7 +105,7 @@ export default function AdminDashboard(){
                 console.log(e)
             } 
         })()
-    },[])
+    },[query,order]) 
 
     useEffect(()=>{
         (async () =>{
@@ -161,6 +164,30 @@ export default function AdminDashboard(){
         }
     }
 
+    const handleSort = (value) =>{
+        console.log(value,"handlesort")
+        if(value == "deadline"){
+            setQuery(value)
+            setOrder(!order)
+        }
+        if(value == "users"){
+            setQuery(value)
+            setOrder(!order)
+        }
+        if(value == "contest"){
+            setQuery(value)
+            setOrder(!order)
+        }
+        if(value == "revenue"){
+            setQuery(value)
+            setOrder(!order)
+        }
+        if(value == "profit"){
+            setQuery(value)
+            setOrder(!order)
+        }
+    }
+
     const handleEdit = (ele) =>{
         playerdispatch({type : "SELECTED_PLAYER" , payload : ele})
         playerdispatch({type : "SET_MODAL" , payload : true})
@@ -193,7 +220,7 @@ export default function AdminDashboard(){
                 <Col md = {2}>
                 </Col>
                 <Col md = {8}>
-                <Tabs className="match-tabs" justify>
+                <Tabs className="match-tabs" justify> 
                 <Tab eventKey="Users" title = "Users">
                     <div className="search-user">
                     <input type="text" value={search} placeholder="search by username" onChange={(e)=>setSearch(e.target.value)}></input>
@@ -202,7 +229,7 @@ export default function AdminDashboard(){
                     <Table className="users-table" striped bordered hover>
                         <thead>
                             <tr>
-                            <th>Username</th> 
+                            <th>Username </th> 
                             <th>Email</th>
                             <th>Mobile</th>
                             <th>Action</th>
@@ -233,11 +260,42 @@ export default function AdminDashboard(){
                         <thead>
                             <tr>
                             <th>Match</th>
-                            <th>Date</th>
-                            <th>Players</th>
-                            <th>Contests</th>
-                            <th>Revenue</th>
-                            <th>Profit</th>
+                            <th
+                            style={{backgroundColor : query == "deadline" && "rgba(0,0,0,0.3)"}}
+                            >Date {query == "deadline" && order ? (
+                                <CaretUpFill onClick={()=>handleSort('deadline')} className="float-end"/>):
+                                (<CaretDownFill onClick={()=>handleSort('deadline')} className="float-end"/>)
+                                }
+                            </th>
+                            <th
+                            style={{backgroundColor : query == "users" && "rgba(0,0,0,0.3)"}}
+                            >Players {query == "users" && order ? (
+                                <CaretUpFill onClick={()=>handleSort('users')} className="float-end"/>):
+                                (<CaretDownFill onClick={()=>handleSort('users')} className="float-end"/>)
+                                }
+                            </th>
+                            <th
+                            style={{backgroundColor : query == "contest" && "rgba(0,0,0,0.3)"}}
+                            >Contests {query == "contest" && order ? (
+                                <CaretUpFill onClick={()=>handleSort('contest')} className="float-end"/>):
+                                (<CaretDownFill onClick={()=>handleSort('contest')} className="float-end"/>)
+                                }
+                            </th>
+                            <th
+                            style={{backgroundColor : query == "revenue" && "rgba(0,0,0,0.3)"}}
+                            >Revenue {query == "revenue" && order ? (
+                                <CaretUpFill onClick={()=>handleSort('revenue')} className="float-end"/>):
+                                (<CaretDownFill onClick={()=>handleSort('revenue')} className="float-end"/>)
+                                }
+                            </th>
+                            <th
+                            style={{backgroundColor : query == "profit" && "rgba(0,0,0,0.3)"}}
+                            >Profit {query == "profit" && order ? (
+                                <CaretUpFill onClick={()=>handleSort('profit')} className="float-end"/>):
+                                (<CaretDownFill onClick={()=>handleSort('profit')} className="float-end"/>)
+                                }
+                            </th>
+                            
                             </tr>
                         </thead>
                         <tbody>

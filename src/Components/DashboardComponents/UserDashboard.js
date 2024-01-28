@@ -17,7 +17,6 @@ import { getStartUser } from "../../Actions/userAction"
 import UpcomingMatches from "../MatchComponent/UpcomingMatches"
 import LiveMatches from "../MatchComponent/LiveMatches"
 import CompletedMatches from "../MatchComponent/CompletedMatches"
-import { loadStripe } from "@stripe/stripe-js"
 import { toast,ToastContainer } from "react-toastify"
 import { getStartWallet } from "../../Actions/walletAction"
 import { clearNotification, getStartNotification } from "../../Actions/notificationAction"
@@ -98,6 +97,8 @@ export default function UserDashboard(){
         }
         console.log(Number(""))
         setLoading(true)
+
+        setTimeout(async ()=>{
         try{
           const response = await axios.post('api/checkout',body,{
             headers : {
@@ -112,9 +113,11 @@ export default function UserDashboard(){
         }catch(e){
           console.log(e)
         }
+      },1200)
       }else{
         toast.error("amount should be less than or equal to 1000")
       }
+      
     }
 
     return(

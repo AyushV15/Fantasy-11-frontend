@@ -30,7 +30,8 @@ export default function JoinContest({closeModal,ele,team,fetchContest}){
               })
         }else{
                     try{
-                        const response = await axios.put(`api/contest/${ele._id}`,team,{
+                        const formdata = {entryFee : ele.entryFee, team : team}
+                        const response = await axios.put(`api/contest/${ele._id}`,formdata,{
                             headers : {
                                 Authorization : localStorage.getItem('token')
                             }

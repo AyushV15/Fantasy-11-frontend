@@ -25,7 +25,7 @@ export default function UserProfile(){
             error.confirmPassword = "password should be between 8 to 128 characters"
         }
         if(password.newPassword !== password.confirmPassword){
-            error.match = "current Password and new Password does not match"
+            error.match = "Confirm Password and new Password does not match"
         }
         
     }
@@ -121,15 +121,14 @@ export default function UserProfile(){
             <h1>Change Password</h1>
             <Image height={200} width={200} src={"https://fantasy11.s3.ap-south-1.amazonaws.com/Images/change-password-image.webp"}/>
             <Form onSubmit={handleChangePassword}>
-                <Form.Control type="password" placeholder = "Enter Old Password" value={password.currentPassword} name="currentPassword" onChange={handleChange}/>
-                {password.errors.currentPassword}
-                <br/>
-                <Form.Control type="password" placeholder = "Enter New Password" value={password.newPassword} name="newPassword" onChange={handleChange} />
-                {password.errors.newPassword}<br/>
-                <Form.Control type="password" placeholder = "Confirm Password" value={password.confirmPassword} name="confirmPassword" onChange={handleChange} />
-                {password.errors.confirmPassword}<br/>
-                {password.errors.match}
-                <Form.Control type="submit"/>
+                <Form.Control type="password" placeholder = "Enter Old Password" value={password.currentPassword} name="currentPassword" onChange={handleChange} required/>
+                <p>{password.errors.currentPassword}</p>
+                <Form.Control type="password" placeholder = "Enter New Password" value={password.newPassword} name="newPassword" onChange={handleChange} required />
+                <p>{password.errors.newPassword}</p>
+                <Form.Control type="password" placeholder = "Confirm Password" value={password.confirmPassword} name="confirmPassword" onChange={handleChange} required />
+                <p>{password.errors.confirmPassword}</p>
+                <p>{password.errors.match}</p>
+                <Form.Control color="red" type="submit"/>
             </Form>
             </div>
             <ToastContainer/>
