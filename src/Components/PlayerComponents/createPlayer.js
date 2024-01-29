@@ -1,6 +1,8 @@
 import { useState } from "react"
 import axios from "../../Axios/axios"
 import { toast,ToastContainer } from "react-toastify"
+import "./createPlayer.css"
+import { Image } from "react-bootstrap"
 
 export default function CreatePlayer(){
     
@@ -26,33 +28,40 @@ export default function CreatePlayer(){
             toast.success("player Created Successfully",{
                 position : "top-center"
             })
+            console.log()
         }catch(e){
-            console.log(e)
+            toast.error(e.response.data.errors.map(ele => ele.msg))
         }
 
     }
 
     return(
-        <div>
+        <div className="create-player">
+            <Image height={300} width={300} src="https://fantasy11.s3.ap-south-1.amazonaws.com/Images/Batsman.jpg"/>
             <form onSubmit={handleSubmit}>
+                <h2>Create Player</h2>
             <label>Player Name</label><br/>
-            <input required type="text" value={name} onChange={(e)=>setName(e.target.value)}/><br/>
-            <select value={role} onChange={(e)=>setRole(e.target.value)} required>
+            <input className="style" required type="text" value={name} onChange={(e)=>setName(e.target.value)}/><br/>
+            
+            <select className="style" value={role} onChange={(e)=>setRole(e.target.value)} required>
                 <option value={""}>Select Role</option>
                 <option value={"wk"}>wk</option>
                 <option value={"bat"}>bat</option>
                 <option value={"all"}>all</option>
                 <option value={"bowl"}>bowl</option>
             </select><br/>
-            <select value={country} onChange={(e)=>setCountry(e.target.value)} required>
+        
+            <select className="style" value={country} onChange={(e)=>setCountry(e.target.value)} required>
                 <option value={""}>Select Country</option>
                 {countryCodes.map(ele =>{
                     return(<option value={ele}>{ele}</option>)
                 })} 
             </select><br/>
-            <input required type="file" accept="image/*" onChange={(e)=>setPic(e.target.files[0])}/><br/>
-            <input type="submit"/>
+            <label>Player Pic</label><br/>
+            <input className="file" required type="file" accept="image/*" onChange={(e)=>setPic(e.target.files[0])}/><br/>
+            <input className="submit" type="submit"/>
             </form>
+            <Image height={300} width={250} src="https://fantasy11.s3.ap-south-1.amazonaws.com/Images/Bowler.png"/>
             <ToastContainer/>
         </div>
     )

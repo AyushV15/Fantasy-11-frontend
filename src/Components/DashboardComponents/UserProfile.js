@@ -52,9 +52,9 @@ export default function UserProfile(){
                 }
             })
             dispatch(updatePic(response.data.profilePic))
-            toast.success("profilePic Updated Successfully")
+            toast.success("profilePic Updated Successfully",{position:"top-center"})
         }catch(e){  
-            console.log(e)
+            e.response.data.errors.map(ele => toast.error(ele.msg , {position : "top-center"}))
             toast.error(e.response.data)
         }
     }
@@ -86,8 +86,14 @@ export default function UserProfile(){
                         Authorization : localStorage.getItem('token')
                     }
                 })
+                toast.success("password Reset Successfully")
+                setPassword({
+                    currentPassword : "",
+                    newPassword : "",
+                    confirmPassword : "",
+                    errors : {}
+                })
             }catch(e){  
-                console.log(e)
                 toast.error(e.response.data)
             }
 

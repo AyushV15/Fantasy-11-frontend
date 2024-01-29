@@ -12,15 +12,13 @@ import JoinContest from "../ContestComponenets/JoinContest"
 import ViewMyContest from "../ContestComponenets/viewMyContest"
 import Swal from "sweetalert2"
 import Marquee from "react-fast-marquee";
-import {getStartUser} from "../../Actions/userAction"
 
 
 import io from "socket.io-client";
-import { useDispatch, useSelector } from "react-redux"
-
+import {  useSelector } from "react-redux"
 import { toast } from "react-toastify"
 import { MatchContext } from "../../Context/Context"
-import { isAction } from "redux"
+
 
 const socket = io.connect("http://localhost:3300")
 
@@ -64,8 +62,7 @@ export default function OneMatch(){
     const [teamUpdate,setTeamUpdate] = useState([])
     const [modal,setModal] = useState(false)
     const [contest,setContest] = useState([])
-    const extendDate = useRef()
-    const Message = useRef()
+
     const {id} = useParams() //getting the match id from url
     const {matches,matchdispatch} = useContext(MatchContext)
 
@@ -95,6 +92,11 @@ export default function OneMatch(){
         });
 
         socket.on('cancel',(data)=>{
+            alert(data)
+            navigate('/dashboard')
+        })
+
+        socket.on('matchEnded',(data)=>{
             alert(data)
             navigate('/dashboard')
         })
@@ -190,6 +192,7 @@ export default function OneMatch(){
         try{
             const response = await axios.put(`api/match/${id}/generate-results`)
             setRankCalculated(true)
+            toast.success(response.data)
         }catch(e){
             console.log(e)
         }
@@ -230,16 +233,16 @@ export default function OneMatch(){
             title: "You are Cancelling the Match",
             input: "text",
             text: "you wont be able to revert back the changes",
-            inputLabel : `Enter ${m._id}/admin`,
+            inputLabel : `Enter ${match ? match._id : m._id}/admin`,
             inputValidator: (value) => {
-                return value !== `${m._id}/admin` && "matchid does not match";
+                return value !== `${match ? match._id : m._id}/admin` && "matchid does not match";
             },
             showCancelButton : true,
-            inputPlaceholder: `Enter ${m._id}/admin`
+            inputPlaceholder: `Enter ${match ? match._id : m._id}/admin`
           });
-          if(confirm == `${m._id}/admin`) {
+          if(confirm == `${match ? match._id : m._id}/admin`) {
               try{
-                  await axios.delete(`api/match/${m._id}/cancel-match`,{
+                  await axios.delete(`api/match/${match ? match._id : m._id}/cancel-match`,{
                     headers : {
                         Authorization : localStorage.getItem('token')
                     }
@@ -256,15 +259,18 @@ export default function OneMatch(){
         const { value: formValues } = await Swal.fire({
             title: "Extend Deadline",
             html: `
-              <input id="deadline" type="datetime-local">
+              <input id="deadline" type="datetime-local" required>
               <input id="message" type="text">
             `,
             focusConfirm: false,
             preConfirm: () => {
               const deadlineValue = document.getElementById("deadline").value;
-              console.log(deadlineValue,"asdjkfkj")
               const messageValue = document.getElementById("message").value.trim();
           
+              if(!deadlineValue){
+                Swal.showValidationMessage("Deadline is Required");
+                return false;
+              }
               if (new Date(deadlineValue) < new Date()) {
                 Swal.showValidationMessage("Deadline should be greater than today");
                 return false;
@@ -301,6 +307,7 @@ export default function OneMatch(){
                     Authorization : localStorage.getItem('token')
                 }
             })
+            toast.success("unfilled contests cancelled successfully")
             
         }catch(e){
             toast.error(e.response.data)
@@ -365,12 +372,11 @@ export default function OneMatch(){
             <div>
             {m && <Button size="sm" variant = "success" onClick={()=>contestUpdate(m._id)}>Calculate Rank</Button>}
             {match && <Button size="sm" onClick={()=>navigate(`/match/${match ? match._id : m._id}/create-contest`)}>Create Contest</Button>} 
-            {m && rankCalculated && <Button variant = "info" onClick={generateResults}>Generate Results</Button>}
+            {rankCalculated && <Button variant = "info" onClick={generateResults}>Generate Results</Button>}
             <Button size="sm" variant = "danger" onClick={cancelMatch}>Cancel Match</Button>
-            <Button size="sm" variant="warning" onClick={cancelContests}>Cancel Contest</Button>
-            {/* <input type="datetime-local" min ={(new Date()).toISOString().slice(0, 16)} ref={extendDate}/>
-            <input type="text" ref={Message}/><br/> */}
-            <Button size="sm" variant="secondary" onClick={extendDeadline}>Extend Deadline</Button>
+            {m && <Button size="sm" variant="warning" onClick={cancelContests}>Cancel Contest</Button>}
+
+            {match && <Button size="sm" variant="secondary" onClick={extendDeadline}>Extend Deadline</Button>}
             </div>
             )}
             {user.role == "user" && <Row>

@@ -71,7 +71,7 @@ function App(){
           console.log(e)
       }
   })()
-  },[page])
+  },[page,render])
 
   const refresh = () =>{
     setRender(!render)

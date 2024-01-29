@@ -20,6 +20,9 @@ import { getStartWallet } from "../../Actions/walletAction"
 import { clearNotification, getStartNotification } from "../../Actions/notificationAction"
 import {formatDistance} from "date-fns"
 import noNotifications from "../../Images/noNotifications.jpg"
+import io from "socket.io-client"
+
+const socket = io.connect("http://localhost:3300")
 
 export default function UserDashboard(){
 
@@ -35,6 +38,8 @@ export default function UserDashboard(){
       localStorage.clear('token')
       navigate('/')
     }
+
+    
 
     useEffect(()=>{
       (async ()=>{
@@ -60,7 +65,14 @@ export default function UserDashboard(){
       dispatch(getStartUser())
       dispatch(getStartWallet())
       dispatch(getStartNotification())
+      
     },[])
+
+    useEffect(()=>{
+      socket.on('notification',(data) =>{
+        alert(data)
+      })
+    },[socket])
 
     const notifications = useSelector(state =>{
       return state.notification
@@ -69,6 +81,8 @@ export default function UserDashboard(){
     const user = useSelector(state=>{
       return state.user
     }) 
+
+    socket.emit('user', user._id)
 
     const wallet = useSelector(state =>{
       return state.wallet
@@ -111,7 +125,7 @@ export default function UserDashboard(){
         }catch(e){
           console.log(e)
         }
-      },1200)
+      },500)
       }else{
         toast.error("amount should be less than or equal to 1000")
       }
@@ -263,7 +277,7 @@ export default function UserDashboard(){
         setLoading(false)
         }}>
         <Modal.Header closeButton>
-            Wallet 
+            Wallet - Rs {wallet.amount}
         </Modal.Header>
         <Modal.Body>
         {loading ? (
@@ -276,7 +290,7 @@ export default function UserDashboard(){
             <p>Min Amount Should be Rs 10</p>
             <p>Add Amount</p>
             <input type="number" value={amount} onChange={(e)=>setAmount(e.target.value)} /><br/>
-            <Button variant="success" onClick={makePayment2} disabled = {Number(amount) < 10}>Add money</Button> 
+            <Button variant="success" onClick={makePayment2} disabled = {Number(amount) < 10 ||Number(amount) > 1000}>Add money</Button> 
           </div>
         )}
         </Modal.Body>

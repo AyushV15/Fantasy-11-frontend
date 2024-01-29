@@ -12,6 +12,7 @@ export default function MatchUpdate({m}){
     const [team1,setTeam1] = useState(m.team1players)
     const [team2,setTeam2] = useState(m.team2players)
     const [score,setScore] = useState("")
+    const [search,setSearch] = useState("")
 
     const update1 = (id) =>{
         const update = team1.map(ele =>{
@@ -62,9 +63,10 @@ export default function MatchUpdate({m}){
 
     return(
         <div>
-            <Button variant="dark" onClick={updateMatch}>updateMatch</Button>
+            {new Date(m.deadline) < new Date() && <Button variant="dark" onClick={updateMatch}>updateMatch</Button>}
+            <input type="" value={search} onChange={(e)=>setSearch(e.target.value)}/>
             <div className="update-players" >
-            {team1.map(ele =>{
+            {team1.filter(ele => ele.name.includes(search)).map(ele =>{
                 return(
                     <Card border="light" bg="dark" text="light" style={{ width: '200px'}}>
                         <Card.Img  variant="top" src={`https://fantasy11.s3.ap-south-1.amazonaws.com/players/${ele.pic}`} />
@@ -79,7 +81,7 @@ export default function MatchUpdate({m}){
                 )
             })}
           
-            {team2.map(ele =>{
+            {team2.filter(ele => ele.name.includes(search)).map(ele =>{
                 return(
                     <Card bg="danger" text="light" style={{ width: '200px'}}>
                         <Card.Img  variant="top" src={`https://fantasy11.s3.ap-south-1.amazonaws.com/players/${ele.pic}`} />
