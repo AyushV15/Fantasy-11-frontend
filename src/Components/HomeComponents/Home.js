@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css"
 import {Typewriter} from  "react-simple-typewriter"
 import {Image,Button,Nav,Navbar} from "react-bootstrap"
-import { SocialIcon } from 'react-social-icons'
+import { SocialIcon } from "react-social-icons"
 import "./Navbar.css"
 import {Link, useNavigate} from "react-router-dom"
 import Accordion from 'react-bootstrap/Accordion';
