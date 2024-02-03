@@ -12,6 +12,7 @@ import JoinContest from "../ContestComponenets/JoinContest"
 import ViewMyContest from "../ContestComponenets/viewMyContest"
 import Swal from "sweetalert2"
 import Marquee from "react-fast-marquee";
+import {SnackbarProvider,enqueueSnackbar} from "notistack"
 
 
 import io from "socket.io-client";
@@ -90,6 +91,7 @@ export default function OneMatch(){
                 setSUpdate(false)
             },10000)
         });
+
 
         socket.on('cancel',(data)=>{
             alert(data)
@@ -221,7 +223,7 @@ export default function OneMatch(){
                   toast.success("Results Generated Successfully")
                   navigate("/dashboard")
               }catch(e){
-                  console.log(e)
+                  toast.error(e.response.data)
               }
             }
     }
@@ -325,6 +327,7 @@ export default function OneMatch(){
                     alert("Deadline has passed")
                     navigate('/dashboard',{replace : true})
                 }}
+                
                 />
                 )}
             </div>
@@ -370,13 +373,13 @@ export default function OneMatch(){
           
             {user.role == "admin" && (
             <div>
-            {m && <Button size="sm" variant = "success" onClick={()=>contestUpdate(m._id)}>Calculate Rank</Button>}
-            {match && <Button size="sm" onClick={()=>navigate(`/match/${match ? match._id : m._id}/create-contest`)}>Create Contest</Button>} 
+            {m && !m.isCompleted &&<Button size="sm" variant = "success" onClick={()=>contestUpdate(m._id)}>Calculate Rank</Button>}
+            {match && !match.isCompleted && <Button size="sm" onClick={()=>navigate(`/match/${match ? match._id : m._id}/create-contest`)}>Create Contest</Button>} 
             {rankCalculated && <Button variant = "info" onClick={generateResults}>Generate Results</Button>}
-            <Button size="sm" variant = "danger" onClick={cancelMatch}>Cancel Match</Button>
-            {m && <Button size="sm" variant="warning" onClick={cancelContests}>Cancel Contest</Button>}
+            {!m.isCompleted && <Button size="sm" variant = "danger" onClick={cancelMatch}>Cancel Match</Button>}
+            {m && !m.isCompleted && <Button size="sm" variant="warning" onClick={cancelContests}>Cancel Contest</Button>}
 
-            {match && <Button size="sm" variant="secondary" onClick={extendDeadline}>Extend Deadline</Button>}
+            {match && !match.isCompleted && <Button size="sm" variant="secondary" onClick={extendDeadline}>Extend Deadline</Button>}
             </div>
             )}
             {user.role == "user" && <Row>
@@ -388,7 +391,7 @@ export default function OneMatch(){
                     
                         <Tabs className="match-tabss" defaultActiveKey={match && new Date(match.deadline) > new Date() ? "All Contest" : "My Contest"} id="justify-tab-example" justify>
 
-                        {match && new Date(match.deadline) > new Date() && (
+                        {(match || m) && new Date(match?.deadline || m.deadline) > new Date() && (
 
                             <Tab eventKey="All Contest" title="All contest">     
                         {team ? (

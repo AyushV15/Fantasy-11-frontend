@@ -39,6 +39,12 @@ export default function UserDashboard(){
       navigate('/')
     }
 
+    useEffect(()=>{
+      socket.on('notification',(data) =>{
+        dispatch(getStartNotification())
+      })
+    },[socket])
+
     
 
     useEffect(()=>{
@@ -68,11 +74,11 @@ export default function UserDashboard(){
       
     },[])
 
-    useEffect(()=>{
-      socket.on('notification',(data) =>{
-        alert(data)
-      })
-    },[socket])
+    // useEffect(()=>{
+    //   socket.on('notification',(data) =>{
+    //     alert(data)
+    //   })
+    // },[socket])
 
     const notifications = useSelector(state =>{
       return state.notification
@@ -123,7 +129,7 @@ export default function UserDashboard(){
           window.location = response.data.url
   
         }catch(e){
-          console.log(e)
+          toast.error(e.response.data.message)
         }
       },500)
       }else{

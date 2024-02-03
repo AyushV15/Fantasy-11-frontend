@@ -13,7 +13,7 @@ export const getStartUser = () =>{
            dispatch(setUser(response.data))
         }catch(e){
             console.log(e)
-            toast.error(e.response.data)
+            toast.error(e.response.data.message)
         }
     }
 }

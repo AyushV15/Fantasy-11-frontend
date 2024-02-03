@@ -18,6 +18,11 @@ import { MatchContext } from './Context/Context';
 import AdminDashboard from './Components/DashboardComponents/adminDashboard';
 import ForgotPassword from './Components/HomeComponents/ForgotPassword';
 import CreatePlayer from './Components/PlayerComponents/createPlayer';
+import io from "socket.io-client"
+import { useDispatch } from 'react-redux';
+import { getStartNotification } from './Actions/notificationAction';
+
+const socket = io.connect("http://localhost:3300")
 
 
 const matchReducer = (state,action) =>{
@@ -59,6 +64,13 @@ function App(){
   
   const [page,pagedispatch] = useReducer(pageReducer,1)
   const [render,setRender] = useState(false)
+  const dispatch = useDispatch()
+
+  // useEffect(()=>{
+  //   socket.on('notification',(data) =>{
+  //     alert(data)
+  //   })
+  // },[socket])
 
   useEffect(()=>{
     (async()=>{

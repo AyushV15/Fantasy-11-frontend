@@ -34,7 +34,6 @@ export default function Register(){
         onSubmit : async (values,{resetForm}) =>{
             try{
                 const response = await axios.post("api/users/register",values)
-                
                 resetForm()
                 toast.success("registered successfully")
                 setTimeout(()=>{

@@ -6,22 +6,23 @@ import { toast ,ToastContainer } from "react-toastify";
 export default function ViewMyContest({ele,close,match,m}){
 
     const [modal,setModal] = useState(true)
-    const [team,setTeam] = useState([])
+    const [team,setTeam] = useState({})
     const user = useSelector(state =>{
       return state.user
     })
 
+    console.log(team,"state team")
     const handleTeamView = (e) =>{
-      console.log(e.userId._id)
-      console.log(user._id)
-      if(new Date(m.deadline) > new Date()){
+
+      console.log(e,"Team")
+      if(new Date(match ? match.deadline : m.deadline) > new Date()){
         if(user._id == e.userId._id){
-          setTeam(e.team)
+          setTeam(e)
         }else{
           toast.info("You can only view other players teams , after the match has started")
         }
       }else{
-        setTeam(e.team)
+        setTeam(e)
       }
     }
 
@@ -53,34 +54,15 @@ export default function ViewMyContest({ele,close,match,m}){
                 <Modal.Body>
                     <ListGroup>
                           {ele.teams.sort((a,b)=>{
-                            const t1 = a.team.reduce((acc,cv)=>{
-                              if(cv.C){
-                                acc += cv.score * 2
-                              }else if(cv.VC){
-                                acc += cv.score * 1.5
-                              }
-                              else{
-                                acc += cv.score
-                              }
-                              return acc
-                            },0)
-                            const t2 = b.team.reduce((acc,cv)=>{
-                              if(cv.C){
-                                acc += cv.score * 2
-                              }else if(cv.VC){
-                                acc += cv.score * 1.5
-                              }
-                              else{
-                                acc += cv.score
-                              }
-                              return acc
-                            },0)
-                            return t2 - t1
+                            return b.totalPoints - a.totalPoints
                           }).map((e,i) => {
+                            {console.log(e,"teasm")}
                             return(
                               <ListGroup.Item 
                               variant= {m && new Date(m.deadline)  < new Date() ? (i + 1 <= ele.prizeBreakup.length ? "success" : "danger") : ("") }
-                              onClick={()=>handleTeamView(e)}><b style={{fontSize : "10px"}}>Rank {i+1}</b> {e.userId.username}</ListGroup.Item>
+                              onClick={()=>handleTeamView(e)}><b style={{fontSize : "10px"}}>Rank {i+1}</b> {e.userId.username}
+                              
+                              </ListGroup.Item>
                             )
                           })}
                     </ListGroup>
@@ -88,20 +70,10 @@ export default function ViewMyContest({ele,close,match,m}){
                 <Modal.Footer>
                 </Modal.Footer>
             </Modal>
-            <Modal show = {team.length > 0} onHide={()=>setTeam([])} >
+            <Modal show = {Object.keys(team).length > 0} onHide={()=>setTeam([])} >
               <Modal.Body>
               <Modal.Header>
-                <h3>Points - {team.reduce((acc,cv)=>{
-                  if(cv.C){
-                    acc += cv.score * 2
-                  }else if(cv.VC){
-                    acc += cv.score * 1.5
-                  }
-                  else{
-                    acc += cv.score
-                  }
-                  return acc
-                },0)}</h3>
+                <h3>Points - {team.totalPoints}</h3>
               </Modal.Header>
                     <Table>
                       <thead>
@@ -111,7 +83,8 @@ export default function ViewMyContest({ele,close,match,m}){
                           </tr>
                       </thead>
                       <tbody>
-                          {team.map(e =>{
+                        {console.log(team , "SADF")}
+                          {Object.keys(team).length > 0 && team.team.map(e =>{
                             return(
                               <tr>
                                 <td> 
@@ -121,7 +94,7 @@ export default function ViewMyContest({ele,close,match,m}){
                                 {e.role == "bat" && <Image src= "https://fantasy11.s3.ap-south-1.amazonaws.com/Images/Ball.png" width={18}/>}
                                 {e.name}
                                 </td>
-                                <td>{e.score} </td>
+                                <td>{e.score.reduce((acc,cv)=> acc+= cv.points,0)} </td>
                               </tr>
                             )
                           })}

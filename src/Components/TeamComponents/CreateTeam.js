@@ -132,7 +132,7 @@ export default function CreateTeam(){
         })
 
         const formdata = {
-            team : finalTeam  
+            team : finalTeam 
         }
         console.log(finalTeam)
         if(!edit){
@@ -171,7 +171,7 @@ export default function CreateTeam(){
                 date={(Date.now() + (new Date(match.deadline).getTime() - Date.now()))}
                 onComplete={()=>{
                     alert("Deadline has passed")
-                    navigate('/dashboard')
+                    navigate('/dashboard',{replace : true})
                 }}
                 />
                 )}
