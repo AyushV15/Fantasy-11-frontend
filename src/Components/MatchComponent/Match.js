@@ -20,8 +20,8 @@ import {  useSelector } from "react-redux"
 import { toast } from "react-toastify"
 import { MatchContext } from "../../Context/Context"
 
-
-const socket = io.connect("http://localhost:3300")
+//edited socket
+const socket = io.connect("https://fantasy11.onrender.com/")
 
 const userContestReducer = (state,action) => {
     switch(action.type){
