@@ -3,7 +3,7 @@ import {string,object,number} from "yup"
 import { Container, Image } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-import {Button,Form,Col,Row,InputGroup} from "react-bootstrap"
+import {Button,Form,Col,Row,InputGroup,Spinner} from "react-bootstrap"
 import axios from "../../Axios/axios"
 import Swal from "sweetalert2"
 import { ToastContainer, toast } from "react-toastify"
@@ -12,7 +12,7 @@ import { ToastContainer, toast } from "react-toastify"
 
 export default function Register(){
 
-    const [location,setLocation] = useState(undefined)
+    const [loading,setLoading] = useState(false)
     const navigate = useNavigate()
     
 
@@ -33,6 +33,7 @@ export default function Register(){
         validateOnChange : false,
         onSubmit : async (values,{resetForm}) =>{
             try{
+                setLoading(true)
                 const response = await axios.post("api/users/register",values)
                 resetForm()
                 toast.success("registered successfully")
@@ -106,7 +107,7 @@ export default function Register(){
                                         </Form.Group>
                                 
                                 
-                                <Button style={{ backgroundColor: "#7510ff", color: "white" }} type="submit" className="btn btn-block text-uppercase mb-2 rounded-pill shadow-sm">Register</Button>
+                                <Button style={{ backgroundColor: "#7510ff", color: "white" }} type="submit" className="btn btn-block text-uppercase mb-2 rounded-pill shadow-sm">Register</Button> {loading && <Spinner size="sm" animation="border" variant="primary" />}
                                 <div className="text-center d-flex justify-content-between mt-4">
                                     <p>Already a Member? <Link to={"/login"}>Login</Link> | <Link to={"/"}>Home</Link></p>
                                 </div>

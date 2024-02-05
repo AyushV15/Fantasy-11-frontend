@@ -146,12 +146,17 @@ export default function MatchUpdate({m}){
 
     
     const updateMatch = async () =>{
-        const data = m
-        data.team1players = team1
-        data.team2players = team2
+        // const data = m
+        // data.team1players = team1
+        // data.team2players = team2
+
+        const body = {
+            team1players : team1,
+            team2players : team2
+        }
     
         try{
-            const response = await axios.put(`api/match/${m._id}/score-updates`,data,{
+            const response = await axios.put(`api/match/${m._id}/score-updates`,body,{
                 headers : {
                     Authorization : localStorage.getItem('token')
                 }
@@ -169,8 +174,7 @@ export default function MatchUpdate({m}){
         const data = {
             type: e.target.options[e.target.selectedIndex].getAttribute("name"),
             points: Number(e.target.value),
-            time: new Date(),
-            id : Number(new Date())
+            time: new Date()
         }
         setScore(data)
         setSelectedPlayer(player)

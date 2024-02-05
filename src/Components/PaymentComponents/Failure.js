@@ -1,6 +1,7 @@
 import "./Success.css"
 import axios from "../../Axios/axios"
 import { useEffect } from "react"
+import "./Failure.css"
 
 export default function Failure(){
 
@@ -23,8 +24,8 @@ export default function Failure(){
     },[])
 
     return(
-        <div>
-            Failure
+        <div className="failure">
+            <img src="https://fantasy11.s3.ap-south-1.amazonaws.com/Images/Payment.png"/>
         </div>
     )
 }

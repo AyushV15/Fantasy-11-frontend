@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { debitWallet } from "../../Actions/walletAction";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer} from "react-toastify";
+import {toast ,ToastContainer} from "react-toastify"
 import { getStartUser } from "../../Actions/userAction";
 
 export default function JoinContest({closeModal,ele,team,fetchContest}){
@@ -31,19 +31,19 @@ export default function JoinContest({closeModal,ele,team,fetchContest}){
         }else{
                     try{
                         const formdata = {entryFee : ele.entryFee, team : team}
-                        const response = await axios.put(`api/contest/${ele._id}`,formdata,{
+                        const response = await axios.put(`api/${ele.matchid}/contest/${ele._id}`,formdata,{
                             headers : {
                                 Authorization : localStorage.getItem('token')
                             }
                         })
+                        toast.success("contest joined successfully")
                         closeModal()
                         fetchContest()
-                        console.log(response)
-                        toast.success("contest joined successfully")
                         dispatch(debitWallet(response.data.entryFee))
-                            
+
                     }catch(e){
-                        console.log(e)
+                        toast.error(e.response.data.errors)
+                        
                     }
         }
     }
@@ -79,7 +79,7 @@ export default function JoinContest({closeModal,ele,team,fetchContest}){
                     <Button onClick={()=>handleClick(team)}>Pay {ele.entryFee}</Button>
                 </Modal.Footer>
             </Modal>
-            <ToastContainer/>
+           <ToastContainer/>
         </div>
     )
 }

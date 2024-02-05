@@ -113,7 +113,6 @@ export default function UserDashboard(){
           name : user.username,
           amount : Number(amount)
         }
-        console.log(Number(""))
         setLoading(true)
 
         setTimeout(async ()=>{

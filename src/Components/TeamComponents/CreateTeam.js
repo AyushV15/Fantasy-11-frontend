@@ -142,10 +142,10 @@ export default function CreateTeam(){
                         Authorization : localStorage.getItem("token")
                     }
                 })
-                console.log(response)
+        
                 navigate(`/match/${id}`,{replace :true})
             }catch(e){
-                console.log(e)
+                toast.error(e.response.data)
             }
         }else{
             try{
@@ -154,10 +154,9 @@ export default function CreateTeam(){
                         Authorization : localStorage.getItem("token")
                     }
                 })
-                console.log(response)
                 navigate(`/match/${id}`,{replace :true})
             }catch(e){
-                console.log(e)
+                toast.error(e.response.data)
             }
         }
 
@@ -372,6 +371,7 @@ export default function CreateTeam(){
                     variant='primary'>Submit</Button>
                 </Modal.Footer>
             </Modal>
+            <ToastContainer/>
         </div>
     )
 }

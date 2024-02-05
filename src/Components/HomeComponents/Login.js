@@ -1,14 +1,16 @@
 import "./Login.css"
-import { Form,Button, Container, Image ,Row,Col } from "react-bootstrap"
+import { Form,Button, Container, Image ,Row,Col,Spinner } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "../../Axios/axios"
 import { useFormik } from "formik"
 import { string,object } from "yup"
 import { toast ,ToastContainer} from "react-toastify"
+import { useState } from "react"
 
 export default function Login(){
 
     const navigate = useNavigate()
+    const [loading,setLoading] = useState(false)
 
     const formValidations = object({
         email : string().email().required("email is required"),
@@ -23,6 +25,7 @@ export default function Login(){
         validateOnChange : false,
         onSubmit : async (values,{resetForm}) =>{
             try{
+                setLoading(true)
                 const response = await axios.post("api/users/login",values)
                 const token = response.data.token
                 console.log(response)
@@ -70,7 +73,7 @@ export default function Login(){
                                                 {formik.errors.password}
                                     </Form.Control.Feedback>
                                 </Form.Group>
-                                <Button style={{ backgroundColor: "#7510ff", color: "white" }} type="submit" className=" text-uppercase mb-2 rounded-pill shadow-sm">Login</Button>
+                                <Button style={{ backgroundColor: "#7510ff", color: "white" }} type="submit" className=" text-uppercase mb-2 rounded-pill shadow-sm">Login</Button> {loading && <Spinner size="sm" animation="border" variant="primary" />}
 
                                 <div className="text-center d-flex justify-content-between mt-4">
                                     <p>Not a Member? <Link to={"/Register"}>Register</Link> | <Link to={"/"}>Home</Link> | <Link to={"/forgot-password"}>Forgot Password</Link></p>
