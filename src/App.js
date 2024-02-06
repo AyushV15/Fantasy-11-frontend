@@ -64,20 +64,11 @@ function App(){
   
   const [page,pagedispatch] = useReducer(pageReducer,1)
   const [render,setRender] = useState(false)
-  const dispatch = useDispatch()
-
-  // useEffect(()=>{
-  //   socket.on('notification',(data) =>{
-  //     alert(data)
-  //   })
-  // },[socket])
 
   useEffect(()=>{
     (async()=>{
       try{
-          const response = await axios.get(`api/upcoming-matches?page=${page}`,{headers : {
-              Authorization : localStorage.getItem("token")
-          }})
+          const response = await axios.get(`api/upcoming-matches?page=${page}`)
           matchdispatch({type :"SET_MATCHES", payload : response.data})
       }catch(e){
           console.log(e)
@@ -90,7 +81,6 @@ function App(){
   }
 
   const [matches,matchdispatch] = useReducer(matchReducer,[])
-  console.log(matches,"matches app")
   
   return (
     <div>

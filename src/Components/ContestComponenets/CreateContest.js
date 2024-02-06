@@ -86,8 +86,8 @@ export default function CreateContest(){
     return(
 
         <div className="create-contest">
-            <Tabs defaultActiveKey="Templates">
-                <Tab eventKey="Templates" title = "Templates">
+            <Tabs defaultActiveKey="Custom">
+                <Tab eventKey="Custom" title = "Custom">
                 <div className="create-contest-1">
             <h1>Create a Contest</h1>
             <Form onSubmit={handleSubmit}>
@@ -127,7 +127,7 @@ export default function CreateContest(){
             </Form>
         </div>
                 </Tab>
-                <Tab eventKey="Custom" title = "Custom">
+                <Tab eventKey="Template" title = "Template">
             <Card style={{ width: '18rem' }}>
             <Card.Body>
                     <Card.Title>Head 2 Head</Card.Title>
@@ -160,7 +160,7 @@ export default function CreateContest(){
                             totalPrize : 135,
                             winners : 2,
                             entryFee : 50,
-                            prizeBreakup : [{rank : 1 , prize : 100},{rank : 1 , prize : 35}]
+                            prizeBreakup : [{rank : 1 , prize : 100},{rank : 2 , prize : 35}]
                         })
                     }}>Create</Button>
             </Card.Body>
@@ -174,7 +174,7 @@ export default function CreateContest(){
                     </Card.Text>
                     <Button onClick={(e)=>{
                         handleSubmit(e,{
-                            slots : 1,
+                            slots : 3,
                             totalPrize : 135,
                             winners : 1,
                             entryFee : 50,
@@ -192,7 +192,7 @@ export default function CreateContest(){
                     </Card.Text>
                     <Button onClick={(e)=>{
                         handleSubmit(e,{
-                            slots : 1,
+                            slots : 4,
                             totalPrize : 180,
                             winners : 1,
                             entryFee : 50,

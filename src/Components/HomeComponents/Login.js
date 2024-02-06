@@ -33,6 +33,7 @@ export default function Login(){
                 localStorage.setItem('token',token)
                 navigate('/dashboard')
             }catch(e){
+                setLoading(false)
                 console.log(e.response.data)
                 toast.error(e.response.data)
             }

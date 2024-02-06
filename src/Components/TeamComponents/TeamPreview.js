@@ -39,20 +39,20 @@ export default function TeamPreview({team,match}){
         setBreakDown(obj)
       };
  
-    // const calculatePoints = () =>{
-    //     const points = team.team.reduce((acc,cv) =>{
-    //         if(cv.C){
-    //             acc += 2 * cv.score.reduce((e,ce)=> e += ce.points,0)
-    //         }
-    //         else if(cv.VC){ 
-    //             acc += 1.5 * cv.score.reduce((e,ce)=> e += ce.points,0)
-    //         }else{
-    //             acc += cv.score.reduce((e,ce)=> e += ce.points,0)
-    //         }
-    //         return acc
-    //     },0)
-    //     return points
-    // }
+    const calculatePoints = () =>{
+        const points = team.team.reduce((acc,cv) =>{
+            if(cv.C){
+                acc += 2 * cv.score.reduce((ac,ce)=> ac += ce.points,0)
+            }
+            else if(cv.VC){ 
+                acc += 1.5 * cv.score.reduce((ac,ce)=> ac += ce.points,0)
+            }else{
+                acc += cv.score.reduce((ac,ce)=> ac += ce.points,0)
+            }
+            return acc
+        },0)
+        return points
+    }
 
     const handleView = (player) =>{
         setSelectedPlayer(player)
@@ -61,7 +61,7 @@ export default function TeamPreview({team,match}){
 
     return(
         <div>
-        <h3 style={{textAlign : "center"}}>Points - {team.totalPoints}</h3>
+        <h3 style={{textAlign : "center"}}>Points - {calculatePoints()}</h3>
         {match && new Date(match.deadline) > new Date() && <button onClick={()=>navigate(`/match/${match._id}/create-team`)}>Edit Team</button>}
         
         <div className="team">

@@ -21,8 +21,8 @@ import { toast } from "react-toastify"
 import { MatchContext } from "../../Context/Context"
 
 //edited socket
-// const socket = io.connect("https://fantasy11.onrender.com/")
-const socket = io.connect("http://localhost:3300")
+const socket = io.connect("https://fantasy11.onrender.com/")
+// const socket = io.connect("http://localhost:3300")
 
 const userContestReducer = (state,action) => {
     switch(action.type){
@@ -100,7 +100,6 @@ export default function OneMatch(){
         })
 
         socket.on('matchEnded',(data)=>{
-            alert(data)
             navigate('/dashboard')
         })
 
@@ -398,7 +397,10 @@ export default function OneMatch(){
                         {team ? (
 
                             contest.length == 0 || contest.every(ele => ele.slots == ele.teams.length) ? (
-                                <h3>No Contests Found , Check again later</h3>
+                                // <h3>No Contests Found , Check again later</h3>
+                                <div className="nocontests">
+                                    <Image height={500} src={"https://fantasy11.s3.ap-south-1.amazonaws.com/Images/No+Contests.png"} alt="image"/>
+                                </div>
                             ) : (
                             contest.map(ele =>{
                                 if(ele.slots !== ele.teams.length){
@@ -421,8 +423,14 @@ export default function OneMatch(){
                                 }
                             }))
                         ) : (
-                            contest.length == 0 ? <h3>No Contests Found , Check again later</h3> :
-                            "Create a Team to view Contest"
+                            contest.length == 0 ? 
+                            <div className="nocontests">
+                                    <Image height={500} src={"https://fantasy11.s3.ap-south-1.amazonaws.com/Images/No+Contests.png"} alt="image"/>
+                            </div> :
+                            <div className="nocontests">
+                            <Image height={350} src={"https://fantasy11.s3.ap-south-1.amazonaws.com/Images/cricketer.jpg"} alt="image"/>
+                            <p>Create a Team to View Contests</p>
+                            </div>
                         )}
                             </Tab>
                         )}    

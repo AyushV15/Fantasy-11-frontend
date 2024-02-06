@@ -1,7 +1,7 @@
 import {Box,Stepper,Step,StepLabel,Button} from '@mui/material'
 import {Tabs,Tab,ListGroup,Image, Row, Col, Modal, Table, Badge} from "react-bootstrap"
 import { ToastContainer, toast } from 'react-toastify';
-import { jwtDecode } from 'jwt-decode';
+
 import 'react-toastify/dist/ReactToastify.css';
 import "./CreateTeam.css"
 import Countdown from 'react-countdown';
@@ -9,7 +9,8 @@ import {MatchContext} from "../../Context/Context"
 import { useContext, useEffect, useReducer, useState } from "react"
 import { useNavigate, useParams ,useHistory } from "react-router-dom"
 import axios from "../../Axios/axios"
-import jersey from "../../MZ.avif"
+
+
 
 const teamReducer = (state,action) => {
     switch(action.type){
@@ -142,10 +143,14 @@ export default function CreateTeam(){
                         Authorization : localStorage.getItem("token")
                     }
                 })
-        
+                toast.success("team created successfully")
                 navigate(`/match/${id}`,{replace :true})
             }catch(e){
+                if(e.response.data?.error){
+                    return e.response.data.error.map(ele => toast.error(ele.msg))
+                }
                 toast.error(e.response.data)
+                console.log(e)
             }
         }else{
             try{
@@ -224,7 +229,7 @@ export default function CreateTeam(){
                                     <div style={{display : "flex" , alignItems : "center"}}>
                                     <div>
                                     <Image src = {`https://fantasy11.s3.ap-south-1.amazonaws.com/players/${ele.pic}`} style={{height : "70px"}}/>
-                                    <Image src={`https://fantasy11.s3.ap-south-1.amazonaws.com/TeamJersey/${ele.team}.avif`} style={{height : "30px", position : "absolute",left : "14.9px", top : "60px"}}/>
+                                    <Image src={`https://fantasy11.s3.ap-south-1.amazonaws.com/TeamJersey/${ele.team}.png`} style={{height : "30px", position : "absolute",left : "14.9px", top : "60px"}}/>
                                     </div>
                                     <p>{ele.name}</p>
                                     </div>
@@ -254,7 +259,7 @@ export default function CreateTeam(){
                                     <div style={{display : "flex" , alignItems : "center"}}>
                                     <div>
                                     <Image src = {`https://fantasy11.s3.ap-south-1.amazonaws.com/players/${ele.pic}`} style={{height : "70px"}}/>
-                                    <Image src={`https://fantasy11.s3.ap-south-1.amazonaws.com/TeamJersey/${ele.team}.avif`} style={{height : "30px", position : "absolute",left : "14.5px", top : "60px"}}/>
+                                    <Image src={`https://fantasy11.s3.ap-south-1.amazonaws.com/TeamJersey/${ele.team}.png`} style={{height : "30px", position : "absolute",left : "14.5px", top : "60px"}}/>
                                     </div>
                                     <p>{ele.name}</p>
                                     </div>
@@ -280,7 +285,7 @@ export default function CreateTeam(){
                                     <div style={{display : "flex" , alignItems : "center"}}>
                                     <div>
                                     <Image src = {`https://fantasy11.s3.ap-south-1.amazonaws.com/players/${ele.pic}`} style={{height : "70px"}}/>
-                                    <Image src={`https://fantasy11.s3.ap-south-1.amazonaws.com/TeamJersey/${ele.team}.avif`} style={{height : "30px", position : "absolute",left : "14.5px", top : "60px"}}/>
+                                    <Image src={`https://fantasy11.s3.ap-south-1.amazonaws.com/TeamJersey/${ele.team}.png`} style={{height : "30px", position : "absolute",left : "14.5px", top : "60px"}}/>
                                     </div>
                                     <p>{ele.name}</p>
                                     </div>
@@ -307,7 +312,7 @@ export default function CreateTeam(){
                                     <div style={{display : "flex" , alignItems : "center"}}>
                                     <div>
                                     <Image src = {`https://fantasy11.s3.ap-south-1.amazonaws.com/players/${ele.pic}`} style={{height : "70px"}}/>
-                                    <Image src={`https://fantasy11.s3.ap-south-1.amazonaws.com/TeamJersey/${ele.team}.avif`} style={{height : "30px", position : "absolute",left : "16px", top : "60px"}}/>
+                                    <Image src={`https://fantasy11.s3.ap-south-1.amazonaws.com/TeamJersey/${ele.team}.png`} style={{height : "30px", position : "absolute",left : "14.5px", top : "60px"}}/>
                                     </div>
                                     <p>{ele.name}</p>
                                     </div>

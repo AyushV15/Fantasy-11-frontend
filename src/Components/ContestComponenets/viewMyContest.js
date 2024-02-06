@@ -6,17 +6,32 @@ import { toast ,ToastContainer } from "react-toastify";
 export default function ViewMyContest({ele,close,match,m}){
 
     const [modal,setModal] = useState(true)
-    const [team,setTeam] = useState({})
+    const [team,setTeam] = useState([])
     const user = useSelector(state =>{
       return state.user
     })
 
-    console.log(team,"state team")
-    const handleTeamView = (e) =>{
+    const calculatePoints = (team) =>{
+      console.log(team)
+      const points = team.reduce((acc,cv)=>{
+        if(cv.C){
+          acc += 2 * cv.score.reduce((ac,ce)=> ac += ce.points,0)
+      }
+      else if(cv.VC){ 
+          acc += 1.5 * cv.score.reduce((ac,ce)=> ac += ce.points,0)
+      }else{
+          acc += cv.score.reduce((ac,ce)=> ac += ce.points,0)
+      }
+      return acc
+      },0)
+      return points
+    }
 
-      console.log(e,"Team")
+   
+    const handleTeamView = (e,id) =>{
+
       if(new Date(match ? match.deadline : m.deadline) > new Date()){
-        if(user._id == e.userId._id){
+        if(user._id == id){
           setTeam(e)
         }else{
           toast.info("You can only view other players teams , after the match has started")
@@ -54,14 +69,13 @@ export default function ViewMyContest({ele,close,match,m}){
                 <Modal.Body>
                     <ListGroup>
                           {ele.teams.sort((a,b)=>{
-                            return b.totalPoints - a.totalPoints
+                            return calculatePoints(b.team) - calculatePoints(a.team)
                           }).map((e,i) => {
                             {console.log(e,"teasm")}
                             return(
                               <ListGroup.Item 
                               variant= {m && new Date(m.deadline)  < new Date() ? (i + 1 <= ele.prizeBreakup.length ? "success" : "danger") : ("") }
-                              onClick={()=>handleTeamView(e)}><b style={{fontSize : "10px"}}>Rank {i+1}</b> {e.userId.username}
-                              
+                              onClick={()=>handleTeamView(e.team,e.userId._id)}><b style={{fontSize : "10px"}}>Rank {i+1}</b> {e.userId.username}
                               </ListGroup.Item>
                             )
                           })}
@@ -73,7 +87,8 @@ export default function ViewMyContest({ele,close,match,m}){
             <Modal show = {Object.keys(team).length > 0} onHide={()=>setTeam([])} >
               <Modal.Body>
               <Modal.Header>
-                <h3>Points - {team.totalPoints}</h3>
+                {console.log(team)}
+                <h3>Points - {calculatePoints(team)}</h3>
               </Modal.Header>
                     <Table>
                       <thead>
@@ -83,8 +98,8 @@ export default function ViewMyContest({ele,close,match,m}){
                           </tr>
                       </thead>
                       <tbody>
-                        {console.log(team , "SADF")}
-                          {Object.keys(team).length > 0 && team.team.map(e =>{
+                     
+                          {team.map(e =>{
                             return(
                               <tr>
                                 <td> 

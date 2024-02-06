@@ -22,7 +22,8 @@ import {formatDistance} from "date-fns"
 import noNotifications from "../../Images/noNotifications.jpg"
 import io from "socket.io-client"
 
-const socket = io.connect("http://localhost:3300")
+// const socket = io.connect("http://localhost:3300")
+const socket = io.connect("https://fantasy11.onrender.com/")
 
 export default function UserDashboard(){
 

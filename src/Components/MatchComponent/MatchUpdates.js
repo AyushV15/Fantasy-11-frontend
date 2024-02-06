@@ -146,10 +146,7 @@ export default function MatchUpdate({m}){
 
     
     const updateMatch = async () =>{
-        // const data = m
-        // data.team1players = team1
-        // data.team2players = team2
-
+        
         const body = {
             team1players : team1,
             team2players : team2
@@ -165,7 +162,9 @@ export default function MatchUpdate({m}){
             console.log(response)
          
         }catch(e){
-            console.log(e)
+            e.response.data.errors.map(ele =>{
+                toast.error(ele.msg)
+            })
         }
     }
 
