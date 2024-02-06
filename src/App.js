@@ -18,11 +18,7 @@ import { MatchContext } from './Context/Context';
 import AdminDashboard from './Components/DashboardComponents/adminDashboard';
 import ForgotPassword from './Components/HomeComponents/ForgotPassword';
 import CreatePlayer from './Components/PlayerComponents/createPlayer';
-import io from "socket.io-client"
-import { useDispatch } from 'react-redux';
-import { getStartNotification } from './Actions/notificationAction';
 
-const socket = io.connect("http://localhost:3300")
 
 
 const matchReducer = (state,action) =>{
