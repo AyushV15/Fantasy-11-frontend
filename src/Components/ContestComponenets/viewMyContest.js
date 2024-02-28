@@ -34,7 +34,9 @@ export default function ViewMyContest({ele,close,match,m}){
         if(user._id == id){
           setTeam(e)
         }else{
-          toast.info("You can only view other players teams , after the match has started")
+          toast.info("You can only view other players teams , after the match has started",{
+            position : "top-center"
+          })
         }
       }else{
         setTeam(e)

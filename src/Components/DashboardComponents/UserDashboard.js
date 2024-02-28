@@ -22,8 +22,8 @@ import {formatDistance} from "date-fns"
 import noNotifications from "../../Images/noNotifications.jpg"
 import io from "socket.io-client"
 
-// const socket = io.connect("http://localhost:3300")
-const socket = io.connect("https://fantasy11.onrender.com/")
+const socket = io.connect("http://localhost:3300")
+// const socket = io.connect("https://fantasy11.onrender.com/")
 
 export default function UserDashboard(){
 
@@ -36,7 +36,7 @@ export default function UserDashboard(){
     const navigate = useNavigate()
 
     const handleLogout = () =>{ 
-      localStorage.clear('token')
+      localStorage.removeItem('token')
       navigate('/')
     }
 

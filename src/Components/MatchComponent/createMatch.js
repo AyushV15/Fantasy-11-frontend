@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import {useFormik} from "formik"
 import Select from "react-dropdown-select"
 import axios from "../../Axios/axios"
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { Form, Row,Col } from "react-bootstrap"
 import "./CreateMatch.css"
 import { toast,ToastContainer } from "react-toastify"
+import { MatchContext } from "../../Context/Context"
 
 export default function CreateMatch2(){
 
@@ -92,7 +93,7 @@ export default function CreateMatch2(){
                 }})
                 console.log(response)
                 toast.success("Match Created Successfully")
-                // navigate("/dashboard")
+                navigate("/dashboard")
             }catch(e){
                 console.log(e)
                 e.response.data.error.map(ele =>{

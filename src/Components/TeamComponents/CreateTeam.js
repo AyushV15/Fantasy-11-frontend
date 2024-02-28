@@ -146,6 +146,9 @@ export default function CreateTeam(){
                 toast.success("team created successfully")
                 navigate(`/match/${id}`,{replace :true})
             }catch(e){
+                if(e.response.data.message){
+                    toast(e.response.data.message)
+                }
                 if(e.response.data?.error){
                     return e.response.data.error.map(ele => toast.error(ele.msg))
                 }

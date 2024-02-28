@@ -1,7 +1,7 @@
 import { useContext, useEffect, useReducer, useState ,useRef} from "react"
 import { useAsyncValue, useNavigate, useParams } from "react-router-dom"
 import axios from "../../Axios/axios"
-import { Tab,Tabs,Image, Col,Row, Button,Card,ProgressBar, ToastContainer} from "react-bootstrap"
+import { Tab,Tabs,Image, Col,Row, Button,Card,ProgressBar, ToastContainer, Spinner} from "react-bootstrap"
 import "./Match.css"
 import gif from "../../Images/scoreUpdate.gif"
 import Countdown from "react-countdown"
@@ -12,8 +12,6 @@ import JoinContest from "../ContestComponenets/JoinContest"
 import ViewMyContest from "../ContestComponenets/viewMyContest"
 import Swal from "sweetalert2"
 import Marquee from "react-fast-marquee";
-import {SnackbarProvider,enqueueSnackbar} from "notistack"
-
 
 import io from "socket.io-client";
 import {  useSelector } from "react-redux"
@@ -21,8 +19,8 @@ import { toast } from "react-toastify"
 import { MatchContext } from "../../Context/Context"
 
 //edited socket
-const socket = io.connect("https://fantasy11.onrender.com/")
-// const socket = io.connect("http://localhost:3300")
+// const socket = io.connect("https://fantasy11.onrender.com/")
+const socket = io.connect("http://localhost:3300")
 
 const userContestReducer = (state,action) => {
     switch(action.type){
@@ -60,8 +58,8 @@ export default function OneMatch(){
     const [mycontest,setMyContest] = useState(false)
     const [selectedmyContest,setSelectedMyContest] = useState({})
     const [selectedContest,setSelectedContest] = useState({})
-    const [updateContest,setUpdateContest] = useState(false)
-    const [teamUpdate,setTeamUpdate] = useState([])
+    const [updateContest,setUpdateContest] = useState(false) //updating after joining a contest
+    const [teamUpdate,setTeamUpdate] = useState([]) //score updates
     const [modal,setModal] = useState(false)
     const [contest,setContest] = useState([])
 
@@ -72,9 +70,12 @@ export default function OneMatch(){
         return state.user
    })
 
+
     console.log(userContest)
     const match = matches.find(ele => ele._id == id)
     const m = !match && Object.keys(user).length > 0 && user.matches.find(ele => ele._id == id)
+
+    
 
     const joinMatchRoom = (matchId) => {
         socket.emit('joinMatchRoom', matchId);
@@ -142,6 +143,7 @@ export default function OneMatch(){
         })()
     },[updateContest])
 
+    //updating scores
     useEffect(()=>{
         const t = team && team.team.map(ele =>{
             const player = teamUpdate.find(e => ele._id == e._id)
@@ -190,6 +192,7 @@ export default function OneMatch(){
         setMyContest(false)
     }
 
+    //admin calculate rank
     const contestUpdate = async (id) =>{
         try{
             const response = await axios.put(`api/match/${id}/generate-results`)
@@ -317,6 +320,14 @@ export default function OneMatch(){
     }
    
     return(
+        <div>
+            {!match && !m ? (
+        <div className="match-spinner">
+            <img height={80} src="https://fantasy11.s3.ap-south-1.amazonaws.com/Images/Animation+-+1707370426588.gif"/>
+            <img height={80} src="https://fantasy11.s3.ap-south-1.amazonaws.com/Images/Animation+-+1707370426588.gif"/>
+            <img height={80} src="https://fantasy11.s3.ap-south-1.amazonaws.com/Images/Animation+-+1707370426588.gif"/>
+        </div>
+            ):(
         <div> 
            
             <div className="match-countdown">
@@ -468,6 +479,7 @@ export default function OneMatch(){
 
             {(match||m )&& user.role == "admin" && <MatchUpdate m = {match ? match : m}/>}
             
+            
             {modal && <JoinContest 
             closeModal = {closeModal} 
             ele = {selectedContest} 
@@ -482,6 +494,8 @@ export default function OneMatch(){
             m={m}
             />}
         <ToastContainer/>
+        </div>
+        )}
         </div>
     )
 }

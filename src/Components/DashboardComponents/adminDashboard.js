@@ -335,6 +335,7 @@ export default function AdminDashboard(){
                     <Table striped bordered hover responsive>
                         <thead>
                             <tr>
+                            <th>Image</th>
                             <th>Name</th>
                             <th>Role</th>
                             <th>Country</th>
@@ -357,6 +358,7 @@ export default function AdminDashboard(){
                             }).filter(ele => ele.name.toLowerCase().includes(playerSearch.toLowerCase())).map(ele => {
                                 return(
                                     <tr key={ele._id}>
+                                        <img height={50} src={`https://fantasy11.s3.ap-south-1.amazonaws.com/players/${ele.pic}`}/>
                                         <td>{ele.name}</td>
                                         <td>{ele.role}</td>
                                         <td>{ele.nationality}</td>

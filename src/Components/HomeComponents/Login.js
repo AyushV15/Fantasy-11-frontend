@@ -12,6 +12,7 @@ export default function Login(){
     const navigate = useNavigate()
     const [loading,setLoading] = useState(false)
 
+    //formik validations using yup
     const formValidations = object({
         email : string().email().required("email is required"),
         password : string().min(8).max(128).required("password must be between 8 to 128 characters"),
@@ -61,8 +62,8 @@ export default function Login(){
                                     isInvalid = {formik.errors.email}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                                {formik.errors.email}
-                                    </Form.Control.Feedback>
+                                    {formik.errors.email}
+                                </Form.Control.Feedback>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Control

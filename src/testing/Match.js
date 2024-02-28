@@ -16,11 +16,6 @@ export default function Match(){
     
     return(
 
-
-
-
-
-
     <div>   
     <Card className="text-center">
       <Card.Header>IPL 2024</Card.Header>

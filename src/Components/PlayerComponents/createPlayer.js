@@ -3,9 +3,11 @@ import axios from "../../Axios/axios"
 import { toast,ToastContainer } from "react-toastify"
 import "./createPlayer.css"
 import { Image } from "react-bootstrap"
+import { useNavigate } from "react-router-dom"
 
 export default function CreatePlayer(){
     
+    const navigate = useNavigate()
     const [name,setName] = useState("")
     const [country,setCountry] = useState("")
     const [role,setRole] = useState("")
@@ -28,9 +30,9 @@ export default function CreatePlayer(){
             toast.success("player Created Successfully",{
                 position : "top-center"
             })
-            console.log()
+            navigate("/admin-dashboard")
         }catch(e){
-            toast.error(e.response.data.errors.map(ele => ele.msg))
+            e.response.data.errors.map(ele => toast.error(ele.msg))
         }
 
     }

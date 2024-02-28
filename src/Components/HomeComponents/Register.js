@@ -107,7 +107,7 @@ export default function Register(){
                                         </Form.Group>
                                 
                                 
-                                <Button style={{ backgroundColor: "#7510ff", color: "white" }} type="submit" className="btn btn-block text-uppercase mb-2 rounded-pill shadow-sm">Register</Button> {loading && <Spinner size="sm" animation="border" variant="primary" />}
+                                <Button style={{ backgroundColor: "#7510ff", color: "white" }} type="submit" className=" text-uppercase mb-2 rounded-pill shadow-sm">Register</Button> {loading && <Spinner size="sm" animation="border" variant="primary" />}
                                 <div className="text-center d-flex justify-content-between mt-4">
                                     <p>Already a Member? <Link to={"/login"}>Login</Link> | <Link to={"/"}>Home</Link></p>
                                 </div>

@@ -22,7 +22,7 @@ export default function ListMatches(){
             {matches && matches.map(ele => {
                 
                 return(
-                    <Card className="text-center" key={ele._id}>
+                    <Card className="text-center mb-4 mt-4"  key={ele._id}>
                         <Card.Header className="cardheader">{ele.tournament}</Card.Header>
                         <Card.Body className="card-body">
         <Card.Title >

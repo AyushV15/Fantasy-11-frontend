@@ -119,7 +119,7 @@ export default function UserProfile(){
                 <Form.Control  type="text" placeholder={user.mobile} disabled/><br/>
                 <label>Profile Pic</label>
                 <Form.Control required  type="file" accept="image/*" onChange={(e)=>setProfilePic(e.target.files[0])}/>
-                <b>only JPG/JPEG images are allowed</b>
+                <b>only JPG/JPEG/PNG images are allowed</b>
                 <Form.Control  type="submit"/>
             </Form>
             </div>
